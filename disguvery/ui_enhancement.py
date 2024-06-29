@@ -130,7 +130,7 @@ class EnhancePanel():
         # Set values in respective dictionary
         settings_var[current_method][0] = int(settings_var['current'][1].get())
         settings_var[current_method][1] = int(settings_var['current'][2].get())
-        settings_var[current_method][2] = int(settings_var['current'][3].get())
+        settings_var[current_method][2] = float(settings_var['current'][3].get())
 
         # Print message in the terminal to notify the user about the updated settings
         print(f'The membrane enhancement settings for {current_method} detection have been saved.')
@@ -181,7 +181,7 @@ class EnhancePanel():
             update_single_channel = False
             
         # Get the filter size
-        filter_size = int(self.controller.appdata_settingsenhance['current'][3].get())
+        filter_size = float(self.controller.appdata_settingsenhance['current'][3].get())
         # Update settings values
         self.update_filtersize(filter_size, 'gaussian_laplace')
 
