@@ -32,6 +32,7 @@ D:\disguvery-main> mamba env create -f environment.yml -n disguvery
 ```
 
 **Activating and using the environment**
+
 Once you have successfully created the environment, run the following command (not sensitive to the folder you are located in) to activate the environment before you launch DisGUVery:
 
 ```
@@ -45,13 +46,16 @@ D:\disguvery-main\disguvery> python disguvery.py
 ```
 
 **Deactivating the environment**
+
 If you would like to deactivate the environment, run the following (not sensitive to the folder you are located in):
 
 ```
 mamba deactivate
 ```
 
-### Installing required packages on a Python virtual environment
+---
+
+### Installation with a Python virtual environment
 
 To create a virtual environment, navigate to the `disguvery-main` folder and type:
 
@@ -88,6 +92,8 @@ D:\disguvery-main> .\disguvery-env\Scripts\activate
 D:\disguvery-main> cd disguvery
 D:\disguvery-main\disguvery> python disguvery.py
 ```
+
+---
 
 ## Usage
 
