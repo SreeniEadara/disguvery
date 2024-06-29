@@ -173,7 +173,7 @@ class disGUVery(tk.Frame):
                                         'rad_norm': tk.IntVar(value = 0)}   
 
         # Settings for batch processing
-        self.appdata_settingsbatch = {'preprocess': [tk.IntVar(value = 1), tk.IntVar(value = 1)],
+        self.appdata_settingsbatch = {'preprocess': [tk.IntVar(value = 1), tk.IntVar(value = 1), tk.IntVar(value=1)],
                                     'vesdet_method': [tk.StringVar(value = 'Hough Detection'), ['Hough Detection', 'Template Matching', 'Floodfill']],
                                     'vesdet': [tk.IntVar(value = 1), tk.IntVar(value = 1)],
                                     'membrane': [tk.IntVar(value = 1), tk.IntVar(value = 0)],
@@ -213,7 +213,7 @@ class disGUVery(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     # Get the logo and apply it
-    #root.iconbitmap(False, 'logo/logo-disguvery.ico')
+    root.iconbitmap(False, default = 'disguvery\logo\logo-disguvery.ico')
     app = disGUVery(root)
     root.mainloop()
 

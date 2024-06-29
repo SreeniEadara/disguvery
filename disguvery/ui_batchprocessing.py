@@ -53,8 +53,9 @@ class BatchPanel():
         preLabelFrame = ttk.LabelFrame(bpanel, text = 'Pre-processing')
         filterCheckbox = ttk.Checkbutton(preLabelFrame, text = 'Filter', variable = settings_var['preprocess'][0])
         enhanceCheckbox = ttk.Checkbutton(preLabelFrame, text = 'Membrane Enhancement', variable = settings_var['preprocess'][1])
+        gaussianLaplaceCheckbox = ttk.Checkbutton(preLabelFrame, text = 'Gaussian Laplace', variable = settings_var['preprocess'][2])
 
-        for n, w in enumerate([filterCheckbox, enhanceCheckbox]):
+        for n, w in enumerate([filterCheckbox, enhanceCheckbox, gaussianLaplaceCheckbox]):
             w.grid(row = n, column = 0, sticky = 'nsew', padx = 7, pady = 3)
 
         # Create vesicle detection options
@@ -233,9 +234,10 @@ class BatchRun():
         det_method = settings_batch['vesdet_method'][0].get().lower()
 
         # Preprocessing (enhancement)
-        enhance_type = [False, False]
+        enhance_type = [False, False, False]
         if settings_batch['preprocess'][0].get() == 1: enhance_type[0] = True
         if settings_batch['preprocess'][1].get() == 1: enhance_type[1] = True
+        if settings_batch['preprocess'][2].get() == 1: enhance_type[2] = True
 
         if True in enhance_type:
             print('Image pre-processing...')
@@ -355,7 +357,7 @@ class BatchRun():
     def enhancement(input_image, settings_enhance, enhance_type, det_method = None):
 
         # For smoothing and enhancement, we take the full image
-        # enhance_type = [smooth, enhance], Boolean
+        # enhance_type = [smooth, enhance, gaussian_laplace], Boolean
 
         # Update enhancement settings based on detection method
         if len(settings_enhance['current'][1].get()) < 1:
@@ -363,6 +365,7 @@ class BatchRun():
             settings_enhance['current'][0].set(method_key[0])
             settings_enhance['current'][1].set(str(settings_enhance[method_key[0]][0]))
             settings_enhance['current'][2].set(str(settings_enhance[method_key[0]][1]))
+            settings_enhance['current'][3].set(str(settings_enhance[method_key[0]][2]))
 
         if enhance_type[0] is True:
             # Get the filter size for smoothing
@@ -386,8 +389,17 @@ class BatchRun():
         else:
             enhanced_image = smoothed_image
 
+        if enhance_type[2]:
+            # Get the filter size for enhancing
+            filter_size = float(settings_enhance['current'][3].get())
+
+            # gaussian laplace filter image
+            gaussian_laplace_image = ImageFilters.gaussian_laplace(enhanced_image, filter_size)
+        else:
+            gaussian_laplace_image = enhanced_image
+        
         # Return the output image
-        return enhanced_image
+        return gaussian_laplace_image
 
     def vesicledet(input_image, det_method, settings_det, template_image = None):
 
