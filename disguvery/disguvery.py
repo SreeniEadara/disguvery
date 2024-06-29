@@ -108,15 +108,15 @@ class disGUVery(tk.Frame):
         self.appdata_settingsenhance = {'method': ['Hough Detection',
                                                     'Template Matching',
                                                     'Floodfill'],
-                                        'hough': [15, 45], 
-                                        'template': [15,45],
-                                        'flood': [5, 105],
-                                        'current': ['hough', tk.StringVar(value = '15'), tk.StringVar(value = '45')],
-                                        'ch_status': [[], []]
+                                        'hough': [15, 45, 1], 
+                                        'template': [15, 45, 1],
+                                        'flood': [5, 105, 1],
+                                        'current': ['hough', tk.StringVar(value = '15'), tk.StringVar(value = '45'), tk.StringVar(value = '2')],
+                                        'ch_status': [[], [], []]
                                         }
         
         # Information about the vesicle detection settings
-        self.appdata_settingsvesdet = {'enhancement': [tk.BooleanVar(value = False), tk.BooleanVar(value = False)],
+        self.appdata_settingsvesdet = {'enhancement': [tk.BooleanVar(value = False), tk.BooleanVar(value = False), tk.BooleanVar(value = False)],
                                         'method': 'hough',
                                         'hough_eth': tk.StringVar(value = '60'),
                                         'hough_hth': tk.StringVar(value = '50'),
@@ -213,7 +213,7 @@ class disGUVery(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     # Get the logo and apply it
-    root.iconbitmap(False, 'logo/logo-disguvery.ico')
+    #root.iconbitmap(False, 'logo/logo-disguvery.ico')
     app = disGUVery(root)
     root.mainloop()
 

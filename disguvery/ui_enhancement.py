@@ -56,8 +56,10 @@ class EnhancePanel():
         method_index = [x for x in range(len(method_opt)) if current_method in method_opt[x].lower()]
         smooth_value = str(appdata_settings[current_method][0])
         enhance_value = str(appdata_settings[current_method][1])
+        gaussian_laplace_value = str(appdata_settings[current_method][2])
         controller.appdata_settingsenhance['current'][1].set(smooth_value)
         controller.appdata_settingsenhance['current'][2].set(enhance_value)
+        controller.appdata_settingsenhance['current'][3].set(gaussian_laplace_value)
 
         # Create settings widgets and place them
         s_label = ttk.Label(f_settings, text = 'Settings: ')
@@ -87,6 +89,14 @@ class EnhancePanel():
         for n, e_widget in enumerate([e_label, e_entry, e_button]):
             e_widget.grid(row = 1, column = n, sticky = 'nsew', padx = 5, pady = 5)
 
+        # Create widgets for gaussian laplace filter and place them
+        g_label = ttk.Label(f_main, text = 'Gaussian Laplace Filter Size: ')
+        g_entry = ttk.Entry(f_main, width = 5, textvariable = controller.appdata_settingsenhance['current'][3])
+        g_button = ttk.Button(f_main, text = 'Gaussian Laplace Filter', command = self.gaussian_laplace)
+
+        for n, g_widget in enumerate([g_label, g_entry, g_button]):
+            g_widget.grid(row = 3, column = n, sticky= 'nsew', padx= 5, pady = 5)
+
         # Place 'Close' Button
         enhancepanel.closeButton.grid(row = 2, column = 0, sticky = 'nse', padx = 2, pady = 2)
 
@@ -102,10 +112,12 @@ class EnhancePanel():
         method_key = [x for x in settings_var.keys() if x in current_method.lower()]
         smooth_value = str(settings_var[method_key[0]][0])
         enhance_value = str(settings_var[method_key[0]][1])
+        gaussian_laplace_value = str(settings_var[method_key[0]][2])
 
         settings_var['current'][0] = method_key[0]
         settings_var['current'][1].set(smooth_value)
         settings_var['current'][2].set(enhance_value)
+        settings_var['current'][3].set(gaussian_laplace_value)
 
     def save_settings(self):
 
@@ -118,6 +130,7 @@ class EnhancePanel():
         # Set values in respective dictionary
         settings_var[current_method][0] = int(settings_var['current'][1].get())
         settings_var[current_method][1] = int(settings_var['current'][2].get())
+        settings_var[current_method][2] = int(settings_var['current'][3].get())
 
         # Print message in the terminal to notify the user about the updated settings
         print(f'The membrane enhancement settings for {current_method} detection have been saved.')
@@ -154,7 +167,38 @@ class EnhancePanel():
 
         # Show the smoothed image and assign as current image
         self.controller.gw_maindisplay.clear_showimage(smooth_image)
-      
+    
+    def gaussian_laplace(self):
+        # Image to work on is the current image
+        mat_image = self.controller.appdata_imagecurrent
+        # Get the current cannel
+        current_channel = self.controller.appdata_channels['current'].get()
+        # Get the image only from the current channel
+        if (mat_image.ndim > 2) and (current_channel != 0):
+            update_single_channel = True
+            mat_image = mat_image[:,:,current_channel - 1]
+        else:
+            update_single_channel = False
+            
+        # Get the filter size
+        filter_size = int(self.controller.appdata_settingsenhance['current'][3].get())
+        # Update settings values
+        self.update_filtersize(filter_size, 'gaussian_laplace')
+
+        # gaussian_laplace image
+        gaussian_laplace_image = ImageFilters.gaussian_laplace(mat_image, filter_size)
+        # Update current image with the gaussian_laplaceed image in the right channel
+        if update_single_channel is True:
+            self.controller.appdata_imagecurrent[:,:,current_channel - 1] = 1*gaussian_laplace_image
+        else:
+            self.controller.appdata_imagecurrent = 1*gaussian_laplace_image
+
+        # Add the current value to the variable that tracks gaussian_laplaceing
+        self.update_enhancesettings('gaussian_laplace', current_channel)
+
+        # Show the gaussian_laplaceed image and assign as current image
+        self.controller.gw_maindisplay.clear_showimage(gaussian_laplace_image)
+    
     def update_filtersize(self, filter_size, filter_type): 
 
         # Variable settins
@@ -165,6 +209,7 @@ class EnhancePanel():
 
         if filter_type == 'smooth': filter_option = 1
         elif filter_type == 'enhance': filter_option = 2
+        elif filter_type == 'gaussian_laplace': filter_option = 3
         
         # Set variable of the current method with the new value
         settings_var['current'][filter_option].set(str(filter_size))
@@ -211,6 +256,8 @@ class EnhancePanel():
             track_channels = self.controller.appdata_settingsenhance['ch_status'][0]
         elif track_event == 'enhance':
             track_channels = self.controller.appdata_settingsenhance['ch_status'][1]
+        elif track_event == 'gaussian_laplace':
+            track_channels = self.controller.appdata_settingsenhance['ch_status'][2]
 
         if current_channel == 0:
             track_channels = [x for x in range(4)]
@@ -231,5 +278,6 @@ class EnhancePanel():
             self.controller.appdata_settingsenhance['ch_status'][0] = track_channels
         elif track_event == 'enhance':
             self.controller.appdata_settingsenhance['ch_status'][1] = track_channels
-
+        elif track_event == 'gaussian_laplace':
+            self.controller.appdata_settingsenhance['ch_status'][2] = track_channels
       

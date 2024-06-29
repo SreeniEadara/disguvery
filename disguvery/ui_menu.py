@@ -160,7 +160,7 @@ class MenuFile(tk.Menu):
                 self.controller.appdata_settingsbatch['savedir'].set(image_info['directory'])
 
             # Update enhancement status of pre-processing options to None
-            self.controller.appdata_settingsenhance['ch_status'] = [[],[]]
+            self.controller.appdata_settingsenhance['ch_status'] = [[],[],[]]
 
     def load_folder(self):
 
@@ -360,20 +360,21 @@ class MenuDetection(tk.Menu):
             self.controller.gw_enhancement.window.destroy()
         finally:
             self.controller.gw_vesdetection.smooth_check.config(command = self.update_enhancement)
-            self.controller.gw_vesdetection.enhance_check.config(command= self.update_enhancement)
+            self.controller.gw_vesdetection.enhance_check.config(command = self.update_enhancement)
+            self.controller.gw_vesdetection.gaussian_laplace_check.config(command = self.update_enhancement)
 
     def update_enhancement(self):
 
         # Check value of smooth and enhance variable
         smooth_state = self.controller.appdata_settingsvesdet['enhancement'][0].get()
         enhance_state = self.controller.appdata_settingsvesdet['enhancement'][1].get()
-
+        gaussian_laplace_state = self.controller.appdata_settingsvesdet['enhancement'][2].get()
         # Always start from the raw image
         current_image = self.controller.appdata_imagesource['image']
         self.controller.gw_maindisplay.clear_showimage(current_image, update_current = True)
 
         # If either of the values if False, update the enhacement status and text
-        if False in [smooth_state, enhance_state]:
+        if False in [smooth_state, enhance_state, gaussian_laplace_state]:
             # Clear the enhancement status of the current channel
             MenuShared.reset_enhancement(self.controller)
             # Update text in show image button in vesicle detection
@@ -385,6 +386,9 @@ class MenuDetection(tk.Menu):
             self.controller.gw_vesdetection.showimgButton.config(text = 'Show Original Image')
         if enhance_state == True:
             self.controller.gw_enhancement.enhance()
+            self.controller.gw_vesdetection.showimgButton.config(text = 'Show Original Image')
+        if gaussian_laplace_state == True:
+            self.controller.gw_enhancement.gaussian_laplace()
             self.controller.gw_vesdetection.showimgButton.config(text = 'Show Original Image')
 
     def export_current(self):
@@ -583,6 +587,7 @@ class MenuShared():
         current_channel = controller.appdata_channels['current'].get()
         smooth_channel = controller.appdata_settingsenhance['ch_status'][0]
         enhance_channel = controller.appdata_settingsenhance['ch_status'][1]
+        gaussian_laplace_channel = controller.appdata_settingsenhance['ch_status'][2]
 
         # Update the value of the smoothing status for vesicle detection
         if current_channel in smooth_channel:
@@ -594,23 +599,31 @@ class MenuShared():
             controller.appdata_settingsvesdet['enhancement'][1].set(True)
         else:
             controller.appdata_settingsvesdet['enhancement'][1].set(False)
+        # Update the value of the gaussian laplace status for vesicle detection
+        if current_channel in gaussian_laplace_channel:
+            controller.appdata_settingsvesdet['enhancement'][2].set(True)
+        else:
+            controller.appdata_settingsvesdet['enhancement'][2].set(False)
 
     def reset_enhancement(controller = None):
         
         # Get current channel
         current_channel = controller.appdata_channels['current'].get()
         # Get current tracking channels
-        smooth_channels, enhance_channels = controller.appdata_settingsenhance['ch_status']
+        smooth_channels, enhance_channels, gaussian_laplace_channels = controller.appdata_settingsenhance['ch_status']
         
         # Remove all channels if the current_channel = 0
         if current_channel == 0:
             smooth_channels = []
             enhance_channels = []
+            gaussian_laplace_channels = []
         else:
             # Remove selected channel
             try: smooth_channels.remove(current_channel)
             except ValueError: pass
             try: enhance_channels.remove(current_channel)
+            except ValueError: pass
+            try: gaussian_laplace_channels.remove(current_channel)
             except ValueError: pass
            
             # remove the 'all channels' option, channel = 0
@@ -618,10 +631,13 @@ class MenuShared():
             except ValueError: pass
             try: enhance_channels.remove(0)
             except ValueError: pass
+            try: gaussian_laplace_channels.remove(0)
+            except ValueError: pass
 
         # Set the new channels in teh settings
         controller.appdata_settingsenhance['ch_status'][0] = smooth_channels
         controller.appdata_settingsenhance['ch_status'][1] = enhance_channels
+        controller.appdata_settingsenhance['ch_status'][2] = gaussian_laplace_channels
         
     
         

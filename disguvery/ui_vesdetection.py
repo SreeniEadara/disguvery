@@ -76,7 +76,9 @@ class VesdetPanel():
                             variable = controller.appdata_settingsvesdet['enhancement'][0])
         enhance_cbox = ttk.Checkbutton(f_pre, text = 'Enhancement',
                             variable = controller.appdata_settingsvesdet['enhancement'][1])
-        for n, cbox in enumerate([smooth_cbox, enhance_cbox]):
+        gaussian_laplace_cbox = ttk.Checkbutton(f_pre, text = 'Gaussian Laplace',
+                            variable = controller.appdata_settingsvesdet['enhancement'][2])
+        for n, cbox in enumerate([smooth_cbox, enhance_cbox, gaussian_laplace_cbox]):
             cbox.grid(row = 0, column = n, sticky = 'nsew', padx = 5, pady = 2)
 
         # create visualization options and place them
@@ -101,6 +103,7 @@ class VesdetPanel():
         self.window = detpanel
         self.smooth_check = smooth_cbox
         self.enhance_check = enhance_cbox
+        self.gaussian_laplace_check = gaussian_laplace_cbox
         self.showdetButton = showdet_button
         self.showimgButton = showimg_button
 

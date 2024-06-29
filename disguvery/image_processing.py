@@ -21,7 +21,7 @@
 import numpy as np
 import cv2
 from skimage import measure, morphology
-
+from scipy import ndimage
 from matplotlib.patches import Rectangle
 
 class ImageFilters():
@@ -69,6 +69,9 @@ class ImageFilters():
 
         return img_enhanced
         
+    def gaussian_laplace(mat_image, filter_size):
+        return ndimage.gaussian_laplace(mat_image, filter_size)
+    
     def check_filtersize(filter_size):
 
         # If filter size is not odd, update to first higher odd number
@@ -133,7 +136,7 @@ class ImageMask():
 
         # Calculate threshold intensity.
         # threshold is based on the median of all positive pixel values
-        intensity_th = np.float(threshold)*median_positive
+        intensity_th = float(threshold)*median_positive
 
         # Threshold the image as uint8
         img_th = (mat_image > intensity_th).astype('uint8')
