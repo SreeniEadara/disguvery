@@ -1,0 +1,10 @@
+name: disguvery
+dependencies:
+  - pillow==9.0
+  - numpy<2.0
+  - matplotlib==3.5
+  - scikit-image==0.19
+  - pip
+  - pip:
+    - opencv-python==4.5.5.62
+    - ttkthemes==3.2.2
