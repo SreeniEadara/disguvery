@@ -213,7 +213,7 @@ class disGUVery(tk.Frame):
 if __name__ == '__main__':
     root = tk.Tk()
     # Get the logo and apply it
-    root.iconbitmap(False, default = 'disguvery\logo\logo-disguvery.ico')
+    root.iconphoto(False, tk.PhotoImage(file='logo/logo-disguvery-32.png'), tk.PhotoImage(file='logo/logo-disguvery-16.png'))
     app = disGUVery(root)
     root.mainloop()
 
