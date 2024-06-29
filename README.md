@@ -17,7 +17,41 @@ D:\disguvery-main\disguvery> python disguvery.py
 
 When running the software for the first time, you might encounter that some required packages are missing or not up to date. Use `pip` to install missing packages and to update outdated packages. If you need to change your packages versions, and/or install anything new, we recommend to create a virtual environment with the requirements for DisGUVery as to not interfere with your normal installation. You can find a step-by-step guide below.
 
-### Installing required packages on a virtual environment
+## Installation Options
+ - Anaconda / Miniforge (recommended)
+ - Python virtual environment
+
+### Installation with Anaconda or Miniforge (recommended)
+If you do not already have Anaconda, Mambaforge, or Miniforge installed, please visit the Miniforge repository below to download and install Miniforge:
+https://github.com/conda-forge/miniforge
+
+Once you have successfully installed Miniforge and run `mamba init` (or if you already have Anaconda / Mambaforge), navigate to the `disguvery-main` folder and run the following command:
+
+```
+D:\disguvery-main> mamba env create -f environment.yml -n disguvery
+```
+
+**Activating and using the environment**
+Once you have successfully created the environment, run the following command (not sensitive to the folder you are located in) to activate the environment before you launch DisGUVery:
+
+```
+mamba activate disguvery
+```
+
+Navigate to the `disguvery-main` folder and run DisGUVery!
+
+```
+D:\disguvery-main\disguvery> python disguvery.py
+```
+
+**Deactivating the environment**
+If you would like to deactivate the environment, run the following (not sensitive to the folder you are located in):
+
+```
+mamba deactivate
+```
+
+### Installing required packages on a Python virtual environment
 
 To create a virtual environment, navigate to the `disguvery-main` folder and type:
 
