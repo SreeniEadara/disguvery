@@ -265,7 +265,7 @@ class MenuImage(tk.Menu):
             enabled_channels = [f'Channel {x+1}' for x in range(number_channels)]
             enabled_channels.insert(0, 'All Channels')
         # Disable all the options that are not relevant
-        for index in range(menu_channels.index('end')):
+        for index in range(menu_channels.index('end') + 1):
             set_state = 'disabled' 
             try:
                  item_label = menu_channels.entrycget(index, 'label')
