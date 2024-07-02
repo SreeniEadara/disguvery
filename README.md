@@ -6,16 +6,16 @@ Image analysis software to detect and analyse Giant Unilamellar Vesicles in micr
 
 Download the files from the repository and extract the files to a folder of your liking (typically this folder will be called `disguvery-main`). There should be a folder called `disguvery` and in this folder you should now see a selection of python scripts, including `disguvery.py`.
 
-The software does not need to be installed, but can be started right away. To launch the program, start the command window and navigate to the folder where the code is saved. Then, the software can be started by calling the `disguvery.py` file using the `python` command. For example, in Windows if we are working on the `D:`drive, where we have the folder of  `disguvery-main`, we can type:
+View installation instructions below. The recommended method involves creating a virtual environment for DisGUVery using the Python environment manager Miniforge. Once you have installed Miniforge on your computer, an environment for DisGUVery can be created with a single command.
+
+To launch the program, start the command window and navigate to the folder where the code is saved. Activate the environment according to the instructions below (they will differ based on the installation method you used). Then, the software can be started by calling the `disguvery.py` file using the `python` command. For example, in Windows if we are working on the `D:`drive, where we have the folder of  `disguvery-main`, we can type:
 
 ```
 D:\> cd disguvery-main\disguvery
 D:\disguvery-main\disguvery> python disguvery.py
 ```
 
-*Note: if you start your command prompt or terminal in another drive, e.g. `C:` , just type `D:` in the terminal to change to drive D:*  
-
-When running the software for the first time, you might encounter that some required packages are missing or not up to date. Use `pip` to install missing packages and to update outdated packages. If you need to change your packages versions, and/or install anything new, we recommend to create a virtual environment with the requirements for DisGUVery as to not interfere with your normal installation. You can find a step-by-step guide below.
+*Note: if you start your command prompt or terminal in another drive, e.g. `C:` , just type `D:` in the terminal to change to drive D:*
 
 ## Installation Options
  - Anaconda / Miniforge (recommended)
@@ -56,6 +56,8 @@ mamba deactivate
 ---
 
 ### Installation with a Python virtual environment
+
+Make sure you have Python installed (version 3.10 is recommended).
 
 To create a virtual environment, navigate to the `disguvery-main` folder and type:
 
