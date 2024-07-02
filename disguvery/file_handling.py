@@ -205,9 +205,11 @@ class FileExport():
         header_sec_theta = 'Ves ID, Theta (deg), ri (pix), ro (pix)'
 
         # Write the results for the main matrix, in two different files
-        filename_rad = filename.replace('.csv', '_radial_profiles.csv')
-        filename_angular = filename.replace('.csv', '_angular_profiles.csv')
-        filename_angularsec = filename_angular.replace('profiles', 'radius')
+        filename_rad_summary = filename.replace('.csv', '_radial_profiles_summary.csv')
+        filename_rad_raw_root = filename.replace('.csv', '_radial_profiles_raw_')
+        filename_angular_summary = filename.replace('.csv', '_angular_profiles_summary.csv')
+        filename_angular_raw_root = filename.replace('.csv', '_angular_profiles_raw_')
+        filename_angularsec = filename_angular_summary.replace('profiles', 'radius')
 
         # Check which vesicles have radial profiles in them, and which have angular profiles
         ves_rad = [x for x,y in profiles_results.items() if y['radial'] is not None]
@@ -221,15 +223,16 @@ class FileExport():
                 nves = int(ives.split(' ')[-1])
                 results_ves = profiles_results[ives]['radial']
                 for ich, results_ch in results_ves.items():
+                    np.savetxt(filename_rad_raw_root + ives.replace(' ', '_') + "_" + ich.replace(' ', '_') + '.csv', results_ch, delimiter=',')
                     nch = int(ich.split(' ')[-1])
                     ves_array = np.full((results_ch.shape[0],1), nves)
                     ch_array = np.full_like(ves_array, nch)
                     mid_array = np.hstack([ves_array, ch_array, results_ch])
                     array_tosave = np.vstack([array_tosave, mid_array])
         
-            np.savetxt(filename_rad, array_tosave[1:], header = header_main_rad, delimiter = ',', 
+            np.savetxt(filename_rad_summary, array_tosave[1:], header = header_main_rad, delimiter = ',', 
                     fmt = '%i, %i, ' + '%.2f, '*5)
-            print(f'Radial intensity profiles saved in {filename_rad}')
+            print(f'Radial intensity profiles saved in {filename_rad_summary}')
         
         # Write angular profiles, if found
         if len(ves_angular) >= 1:
@@ -241,6 +244,7 @@ class FileExport():
                 results_ves = profiles_results[ives]['angular']
                 for ich, results_ch in results_ves.items():
                     if results_ch is not None:
+                        np.savetxt(filename_angular_raw_root + ives.replace(' ', '_') + "_" + ich.replace(' ', '_') + '.csv', results_ch, delimiter=',')
                         ves_array = np.full((results_ch.shape[0],1), nves)
                         if 'ch' in ich:
                             nch = int(ich.split(' ')[-1])
@@ -252,10 +256,10 @@ class FileExport():
                         else:
                             mid_array = np.hstack([ves_array, theta_vec, results_ch])
                             arraysec_tosave = np.vstack([arraysec_tosave, mid_array])
-        
-            np.savetxt(filename_angular, array_tosave[1:], header = header_main_theta, delimiter = ',', 
+
+            np.savetxt(filename_angular_summary, array_tosave[1:], header = header_main_theta, delimiter = ',', 
                     fmt = '%i, %i, ' + '%.2f, '*5)
-            print(f'Angular intensity profiles saved in {filename_angular}')
+            print(f'Angular intensity profiles saved in {filename_angular_summary}')
             
             if len(arraysec_tosave) > 4: 
                 np.savetxt(filename_angularsec, arraysec_tosave[1:], header = header_sec_theta, delimiter = ',',
