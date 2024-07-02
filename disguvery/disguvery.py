@@ -21,6 +21,7 @@
 # Import tkinter
 import tkinter as tk
 from tkinter import ttk
+import os
 
 # Try to import ttkthemes to be able to use their styles
 try: from ttkthemes import ThemedStyle
@@ -212,8 +213,13 @@ class disGUVery(tk.Frame):
 # Run the application. Start main loop
 if __name__ == '__main__':
     root = tk.Tk()
+    
     # Get the logo and apply it
-    root.iconphoto(False, tk.PhotoImage(file='logo/logo-disguvery-32.png'), tk.PhotoImage(file='logo/logo-disguvery-16.png'))
+    sourcedir = __file__.rpartition(os.sep)[0]
+    small_logo_path = os.path.join(sourcedir, 'logo', 'logo-disguvery-16.png')
+    large_logo_path = os.path.join(sourcedir, 'logo', 'logo-disguvery-32.png')
+    root.iconphoto(False, tk.PhotoImage(file=large_logo_path), tk.PhotoImage(file=small_logo_path))
+
     app = disGUVery(root)
     root.mainloop()
 
