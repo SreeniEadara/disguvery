@@ -70,7 +70,9 @@ class ImageFilters():
         return img_enhanced
         
     def gaussian_laplace(mat_image, filter_size):
-        return ndimage.gaussian_laplace(mat_image, filter_size)
+        img_LoG = ndimage.gaussian_laplace(mat_image, filter_size)
+        img_LoG[img_LoG < 0] = 0
+        return img_LoG
     
     def check_filtersize(filter_size):
 
